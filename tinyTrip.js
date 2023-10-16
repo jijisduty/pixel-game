@@ -1896,7 +1896,7 @@
 
     this.actionFrames = [0];
     this.streamSoundSymbolsList[0] = [
-      { id: "JumpSound", startFrame: 0, endFrame: 1, loop: 1, offset: 0 },
+      //{ id: "JumpSound", startFrame: 0, endFrame: 1, loop: 1, offset: 0 },
     ];
     this.isSingleFrame = false;
     // timeline functions:
@@ -1913,10 +1913,10 @@
       this.InsertIntoSoundStreamData(soundInstance, 0, 1, 1);
       document.addEventListener("click", onClick.bind(this));
 
-      var mySound = new Audio("assets/JumpSound.mp3"); // Replace 'JumpSound.mp3' with the actual audio file path.
+      //var mySound = new Audio("assets/JumpSound.mp3"); // Replace 'JumpSound.mp3' with the actual audio file path.
 
       function onClick() {
-        mySound.play();
+        //mySound.play();
 
         this.mj_mc.gotoAndPlay(13);
         if (
@@ -2034,20 +2034,49 @@
     this._renderFirstFrame();
   }).prototype = p = new lib.AnMovieClip();
   p.nominalBounds = new cjs.Rectangle(162.8, 233.6, 2226.7, 246.4);
+
+  //CORS
   // library properties:
-  lib.properties = {
-    id: "034E8AF2EA56B948B9B3E8749A173574",
-    width: 800,
-    height: 480,
-    fps: 24,
-    color: "#7DE6EE",
-    opacity: 1.0,
-    manifest: [
-      { src: "assets/tinyTrip_atlas_1.png", id: "tinyTrip_atlas_1" },
-      { src: "assets/JumpSound.mp3", id: "JumpSound" },
-    ],
-    preloads: [],
-  };
+
+  (function () {
+    var cors_api_host = "cors-anywhere.herokuapp.com";
+    var origin = window.location.protocol + "//" + window.location.host;
+
+    var open = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function () {
+      var args = [].slice.call(arguments);
+      var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+      if (
+        targetOrigin &&
+        targetOrigin[0].toLowerCase() !== origin &&
+        targetOrigin[1] !== cors_api_host
+      ) {
+        args[1] = "https://" + cors_api_host + "/" + args[1];
+      }
+      return open.apply(this, args);
+    };
+
+    var cors_api_url =
+      "https://" + cors_api_host + "/" + "https://i.imgur.com/SlKLhrk.png";
+
+    lib.properties = {
+      id: "034E8AF2EA56B948B9B3E8749A173574",
+      width: 800,
+      height: 480,
+      fps: 24,
+      color: "#7DE6EE",
+      opacity: 1.0,
+      manifest: [
+        {
+          src: cors_api_url,
+          id: "tinyTrip_atlas_1",
+          type: createjs.LoadQueue.IMAGE,
+          crossOrigin: "Anonymous",
+        },
+      ],
+      preloads: [],
+    };
+  })();
 
   // bootstrap callback support:
 
